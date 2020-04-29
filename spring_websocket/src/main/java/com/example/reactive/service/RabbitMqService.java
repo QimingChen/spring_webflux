@@ -59,4 +59,8 @@ public class RabbitMqService {
 
     return id;
   }
+
+  public void sendMessage(String queue, String eventMsg) {
+  }
+
 }

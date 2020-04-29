@@ -1,7 +1,12 @@
 package com.example.reactive.service;
 
+import java.time.Duration;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.TopicProcessor;
+import reactor.util.concurrent.Queues;
 
 @Service
 public class GameService {
@@ -23,4 +28,13 @@ public class GameService {
     String deletedId = rabbitMqService.removeTopicQueue(id);
     return "deleted" + id;
   }
+
+  public Flux<String> events(String id) {
+    return Flux.
+  }
+
+  private void publishEvent(String queue, String eventMsg) {
+    rabbitMqService.sendMessage(queue, eventMsg);
+  }
+
 }

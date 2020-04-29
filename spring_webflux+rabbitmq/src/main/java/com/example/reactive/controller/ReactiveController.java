@@ -127,8 +127,8 @@ public class ReactiveController {
    * @param name
    * @return
    */
-  @GetMapping(value = "/queue/{name}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<?> receiveMessagesFromQueue(@PathVariable String name) {
+  @GetMapping(value = "/queue/{name}/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public Flux<?> receiveMessagesFromQueue(@PathVariable String name, @PathVariable int id) {
 
     DestinationsConfig.DestinationInfo d = destinationsConfig.getQueues()
         .get(name);
@@ -157,7 +157,10 @@ public class ReactiveController {
         }
 
         String payload = new String(m.getBody());
-        emitter.next(payload);
+        if(id == 1){
+          emitter.next(payload);
+        }
+        emitter.next("received msg, but not to id 1");
 
         log.info("[I176] Message sent to client, queue={}", qname);
 
@@ -215,8 +218,8 @@ public class ReactiveController {
     });
   }
 
-  @GetMapping(value = "/topic/{name}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<?> receiveMessagesFromTopic(@PathVariable String name) {
+  @GetMapping(value = "/topic/{name}/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public Flux<?> receiveMessagesFromTopic(@PathVariable String name, @PathVariable  int id) {
 
     DestinationsConfig.DestinationInfo d = destinationsConfig.getTopics()
         .get(name);
@@ -245,8 +248,13 @@ public class ReactiveController {
           return;
         }
 
-        String payload = new String(m.getBody());
-        emitter.next(payload);
+        if(id == 1) {
+          String payload = new String(m.getBody());
+          emitter.next(payload);
+        }
+        else{
+          emitter.next("received msg, but not to id 1");
+        }
 
         log.info("[I176] Message sent to client, queue={}", qname);
 
